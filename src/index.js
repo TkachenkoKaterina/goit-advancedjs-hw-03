@@ -10,7 +10,6 @@ const elements = {
 };
 
 let breedSelected = false;
-// elements.error.style.display = 'none';
 
 function onSelect(value) {
   elements.cat.innerHTML = '';
@@ -29,16 +28,15 @@ slimSelect.selectEl.addEventListener('change', event => {
   onSelect(event.target.value);
 });
 
-function makeCatCard(breedId) {
+async function makeCatCard(breedId) {
   if (!breedSelected) return;
   showLoader();
-  fetchCatByBreed(breedId)
-    .then(data => {
-      elements.cat.innerHTML = createCatCardMarkup(data);
-    })
-    .finally(() => {
-      hideLoader();
-    });
+  try {
+    const data = await fetchCatByBreed(breedId);
+    elements.cat.innerHTML = createCatCardMarkup(data);
+  } finally {
+    hideLoader();
+  }
 }
 
 function createCatCardMarkup(arr) {
@@ -48,7 +46,7 @@ function createCatCardMarkup(arr) {
   const { description, name, temperament } = arr[0].breeds[0];
 
   return `
-    <img src="${arr[0].url}" alt="${name}" width="300"/>
+    <img src="${arr[0].url}" alt="${name}" width="700"/>
     <h1 class="cat-info_name-breed">${name}</h1>
     <p class="cat-info_description">${description}</p>
     <p class="cat-info_name-habbit">${temperament}</p>
@@ -74,10 +72,8 @@ init();
 
 function showLoader() {
   elements.loader.style.display = 'block';
-  //   elements.breedSelect.style.display = 'none';
 }
 
 function hideLoader() {
   elements.loader.style.display = 'none';
-  //   elements.breedSelect.style.display = 'block';
 }

@@ -1,6 +1,6 @@
+import axios from 'axios';
 import iziToast from 'izitoast';
 import '../node_modules/izitoast/dist/css/iziToast.min.css';
-import axios from 'axios';
 
 const elements = {
   loader: document.querySelector('.loader'),
@@ -12,43 +12,34 @@ const BASE_URL = 'https://api.thecatapi.com/v1';
 const API_KEY =
   'live_RjEIYRa9UIQiuCs0GBjhWjiTFUMeoAxHOIJdhn6UnuIPCQmVsxmCCshAFLBdwlby';
 
+axios.defaults.headers.common['x-api-key'] = API_KEY;
 let errorShown = false;
 
-function fetchBreeds() {
+async function fetchBreeds() {
   const END_POINT = '/breeds';
-  return fetch(`${BASE_URL}${END_POINT}`, {
-    headers: {
-      'x-api-key': API_KEY,
-    },
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  try {
+    const response = await axios.get(`${BASE_URL}${END_POINT}`);
+    return response.data;
+  } catch (error) {
+    handleError();
+    throw new Error(error.message);
+  }
 }
 
-function fetchCatByBreed(breedId) {
+async function fetchCatByBreed(breedId) {
   if (!breedId) {
     return;
   }
   console.log(breedId);
   const END_POINT = '/images/search';
-  const params = new URLSearchParams({
-    breed_ids: breedId,
-  });
-  return fetch(`${BASE_URL}${END_POINT}?${params}`, {
-    headers: {
-      'x-api-key': API_KEY,
-    },
-  })
-    .then(handleResponse)
-    .catch(handleError);
-}
-
-function handleResponse(resp) {
-  if (!resp.ok) {
+  const params = { breed_ids: breedId };
+  try {
+    const response = await axios.get(`${BASE_URL}${END_POINT}`, { params });
+    return response.data;
+  } catch (error) {
     handleError();
-    throw new Error(resp.statusText);
+    throw new Error(error.message);
   }
-  return resp.json();
 }
 
 function handleError() {
