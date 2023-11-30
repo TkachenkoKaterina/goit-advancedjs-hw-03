@@ -8,8 +8,6 @@ const BASE_URL = 'https://api.thecatapi.com/v1';
 const API_KEY =
   'live_RjEIYRa9UIQiuCs0GBjhWjiTFUMeoAxHOIJdhn6UnuIPCQmVsxmCCshAFLBdwlby';
 
-elements.error.style.display = 'none';
-
 function fetchBreeds() {
   const END_POINT = '/breeds';
   return fetch(`${BASE_URL}${END_POINT}`, {

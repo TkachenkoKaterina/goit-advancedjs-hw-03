@@ -10,6 +10,7 @@ const elements = {
 };
 
 let breedSelected = false;
+// elements.error.style.display = 'none';
 
 function onSelect(value) {
   elements.cat.innerHTML = '';
