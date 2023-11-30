@@ -1,5 +1,6 @@
 import iziToast from 'izitoast';
 import '../node_modules/izitoast/dist/css/iziToast.min.css';
+import axios from 'axios';
 
 const elements = {
   loader: document.querySelector('.loader'),
@@ -11,8 +12,10 @@ const BASE_URL = 'https://api.thecatapi.com/v1';
 const API_KEY =
   'live_RjEIYRa9UIQiuCs0GBjhWjiTFUMeoAxHOIJdhn6UnuIPCQmVsxmCCshAFLBdwlby';
 
+let errorShown = false;
+
 function fetchBreeds() {
-  const END_POINT = '/breeds1';
+  const END_POINT = '/breeds';
   return fetch(`${BASE_URL}${END_POINT}`, {
     headers: {
       'x-api-key': API_KEY,
@@ -49,13 +52,16 @@ function handleResponse(resp) {
 }
 
 function handleError() {
-  iziToast.error({
-    title: 'Error',
-    message: 'Oops! Something went wrong! Try reloading the page!',
-    position: 'topRight',
-    timeout: 5000,
-    closeOnClick: true,
-  });
+  if (!errorShown) {
+    iziToast.error({
+      title: 'Error',
+      message: 'Oops! Something went wrong! Try reloading the page!',
+      position: 'topRight',
+      timeout: 5000,
+      closeOnClick: true,
+    });
+    errorShown = true;
+  }
 }
 
 export { fetchBreeds, fetchCatByBreed };

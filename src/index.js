@@ -1,8 +1,6 @@
 import { fetchBreeds, fetchCatByBreed } from '/cat-api';
 import SlimSelect from 'slim-select';
 import '../node_modules/slim-select/dist/slimselect.css';
-// import iziToast from 'izitoast';
-// import '../node_modules/izitoast/dist/css/iziToast.min.css';
 
 const elements = {
   breedSelect: document.querySelector('.breed-select'),
