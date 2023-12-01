@@ -28,15 +28,16 @@ slimSelect.selectEl.addEventListener('change', event => {
   onSelect(event.target.value);
 });
 
-async function makeCatCard(breedId) {
+function makeCatCard(breedId) {
   if (!breedSelected) return;
   showLoader();
-  try {
-    const data = await fetchCatByBreed(breedId);
-    elements.cat.innerHTML = createCatCardMarkup(data);
-  } finally {
-    hideLoader();
-  }
+  return fetchCatByBreed(breedId)
+    .then(data => {
+      elements.cat.innerHTML = createCatCardMarkup(data);
+    })
+    .finally(() => {
+      hideLoader();
+    });
 }
 
 function createCatCardMarkup(arr) {
@@ -46,7 +47,7 @@ function createCatCardMarkup(arr) {
   const { description, name, temperament } = arr[0].breeds[0];
 
   return `
-    <img src="${arr[0].url}" alt="${name}" width="700"/>
+    <img src="${arr[0].url}" alt="${name}" width="350"/>
     <h1 class="cat-info_name-breed">${name}</h1>
     <p class="cat-info_description">${description}</p>
     <p class="cat-info_name-habbit">${temperament}</p>

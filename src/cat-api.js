@@ -15,31 +15,30 @@ const API_KEY =
 axios.defaults.headers.common['x-api-key'] = API_KEY;
 let errorShown = false;
 
-async function fetchBreeds() {
+function fetchBreeds() {
   const END_POINT = '/breeds';
-  try {
-    const response = await axios.get(`${BASE_URL}${END_POINT}`);
-    return response.data;
-  } catch (error) {
-    handleError();
-    throw new Error(error.message);
-  }
+  return axios
+    .get(`${BASE_URL}${END_POINT}`)
+    .then(response => response.data)
+    .catch(error => {
+      handleError();
+      throw new Error(error.message);
+    });
 }
 
-async function fetchCatByBreed(breedId) {
+function fetchCatByBreed(breedId) {
   if (!breedId) {
-    return;
+    return Promise.resolve(); // Return a resolved promise if breedId is falsy
   }
-  console.log(breedId);
   const END_POINT = '/images/search';
   const params = { breed_ids: breedId };
-  try {
-    const response = await axios.get(`${BASE_URL}${END_POINT}`, { params });
-    return response.data;
-  } catch (error) {
-    handleError();
-    throw new Error(error.message);
-  }
+  return axios
+    .get(`${BASE_URL}${END_POINT}`, { params })
+    .then(response => response.data)
+    .catch(error => {
+      handleError();
+      throw new Error(error.message);
+    });
 }
 
 function handleError() {
